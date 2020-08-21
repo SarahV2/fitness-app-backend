@@ -33,7 +33,8 @@ router.post('/', async (req, res) => {
 // @access  Public
 
 router.get('/',async(req,res)=>{
-    const {userID}=req.body
+    const {userID}=req.query
+    console.log(req.query)
     try{
         const userWorkouts=await Workout.find({userID,"createdAt":{$gt:new Date(Date.now() - 24*60*60 * 1000)}})
         res.json(userWorkouts)
@@ -67,7 +68,7 @@ router.patch('/:workoutID', async (req, res) => {
           console.log('Match!')
 
           // Update document with the new values 
-          
+
           workout.exerciseName=exerciseName
           workout.sets=sets
           workout.reps=reps
