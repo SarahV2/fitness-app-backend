@@ -43,11 +43,55 @@ router.get('/',async(req,res)=>{
     }
 })
 
+
+
+// @route   Patch api/workouts
+// @desc    Update an existing workout using its ID
+// @access  Public
+
+router.patch('/:workoutID', async (req, res) => {
+    try {
+      const { userID, exerciseName, sets, reps, notes, muscleID } = req.body;
+      const updatedValues = new Workout({
+        exerciseName,
+        sets,
+        reps,
+        notes,
+      });
+  
+      console.log(req.body);
+      console.log('recieved');
+      const workout = await Workout.findById(req.params.workoutID)
+
+      if(userID==workout.userID){
+          console.log('Match!')
+
+          // Update document with the new values 
+          
+          workout.exerciseName=exerciseName
+          workout.sets=sets
+          workout.reps=reps
+          workout.notes=notes
+
+        const updatedWorkout=await workout.save()
+
+          res.json(updatedWorkout);
+      }
+      else{
+          res.json({error:'Unauthorized Access'})
+      }
+     
+    } catch (error) {
+      res.json(error);
+    }
+  });
+
+  
 // @route   Delete api/workouts/workoutID
 // @desc    Delete a workout using its ID
 // @access  Public
 
-router.delete(`/:workoutID`, async (req, res) => {
+router.delete('/:workoutID', async (req, res) => {
   try {
     await Workout.findByIdAndDelete(req.params.workoutID);
     res.json('deleted!');
@@ -57,3 +101,5 @@ router.delete(`/:workoutID`, async (req, res) => {
 });
 
 module.exports = router;
+
+
