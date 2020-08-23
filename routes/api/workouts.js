@@ -22,6 +22,7 @@ router.post('/', async (req, res) => {
     console.log(req.body);
     console.log('recieved');
     const workout = await newWorkout.save();
+    console.log('added!')
     res.json(workout);
   } catch (error) {
     res.json(error);
@@ -44,6 +45,21 @@ router.get('/',async(req,res)=>{
     }
 })
 
+// @route   GET api/workouts
+// @desc    Get all of the user's workouts 
+// @access  Public
+
+router.get('/all',async(req,res)=>{
+  const {userID}=req.query
+  console.log(req.query)
+  try{
+      const userWorkouts=await Workout.find({userID})
+      res.json(userWorkouts)
+  }
+  catch(error){
+      res.json(error)
+  }
+})
 
 
 // @route   Patch api/workouts
